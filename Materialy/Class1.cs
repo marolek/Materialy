@@ -27,10 +27,12 @@ namespace Materialy
 {
     public class Class1 : IExtensionApplication
     {
-        public int polecenie = 0;
+        //do identyfikacji polecenia ListaMaterialowSEP lub ListaMaterialow - ToDo
+        //public int polecenie = 0;
 
+        //ListaMaterialowSEP - Lista materiałów w podziale na grupy materiałowe
         [Autodesk.AutoCAD.Runtime.CommandMethod("ListaMaterialowSEP")]
-        public void ListaMaterialow()
+        public void ListaMaterialowSEP()
         {
             CivilDocument Civdoc = Autodesk.Civil.ApplicationServices.CivilApplication.ActiveDocument;
             Document acDoc = Application.DocumentManager.MdiActiveDocument;
@@ -38,7 +40,7 @@ namespace Materialy
             Database acCurDb = acDoc.Database;
             ObjectIdCollection alignments = Civdoc.GetAlignmentIds();
 
-            ed.WriteMessage("\nWywołano polecenie: {0}", polecenie);
+            //ed.WriteMessage("\nWywołano polecenie: {0}", polecenie);
 
             using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
             {
@@ -90,6 +92,7 @@ namespace Materialy
                                         MaterialSection MaterialSectionObject = (MaterialSection)acTrans.GetObject(MaterialSectionID, OpenMode.ForRead);
                                         
                                         double area = 0.0;
+                                        //MaterialSectionObject.Area zwraca 0! więc powierzchnia obliczona z obrysu materiału (Calculate.Area)
                                         Point2dCollection p2 = new Point2dCollection();
                                         SectionPointCollection sPts = MaterialSectionObject.SectionPoints;
                                         foreach(SectionPoint pt in sPts)
@@ -112,14 +115,17 @@ namespace Materialy
                         }
                     }
                 }
-                catch (System.Exception ex) { }
+                catch (System.Exception ex) {
+                    ed.WriteMessage("Błąd transakcji: {0}", ex);
+                 }
                 acTrans.Commit();
             }
 
         }
 
+        //ListaMaterialow - Lista materiałów scalone wszystkie grupy materiałowe
         [Autodesk.AutoCAD.Runtime.CommandMethod("ListaMaterialow")] 
-        public void ListaMaterialow2()
+        public void ListaMaterialow()
         {
             CivilDocument Civdoc = Autodesk.Civil.ApplicationServices.CivilApplication.ActiveDocument;
             Document acDoc = Application.DocumentManager.MdiActiveDocument;
@@ -193,6 +199,7 @@ namespace Materialy
                                         MaterialSection MaterialSectionObject = (MaterialSection)acTrans.GetObject(MaterialSectionID, OpenMode.ForRead);
                                         
                                         double area = 0.0;
+                                        //MaterialSectionObject.Area zwraca 0! więc powierzchnia obliczona z obrysu materiału (Calculate.Area)
                                         Point2dCollection p2 = new Point2dCollection();
                                         SectionPointCollection sPts = MaterialSectionObject.SectionPoints;
                                         foreach(SectionPoint pt in sPts)
@@ -222,7 +229,9 @@ namespace Materialy
                         System.IO.File.Copy(OutputFileName, destFile, true);
                     }
                 }
-                catch (System.Exception ex) { }
+                catch (System.Exception ex) { 
+                    ed.WriteMessage("Błąd transakcji: {0}", ex);
+                }
                 acTrans.Commit();
             }
         }
@@ -232,7 +241,7 @@ namespace Materialy
         public void Initialize()
         {
             Document acDoc = Application.DocumentManager.MdiActiveDocument;
-            acDoc.Editor.WriteMessage("\nWczytano dodatek generujący raport materiałów - Użyj polecenia: ListaMaterialow");
+            acDoc.Editor.WriteMessage("\nWczytano dodatek generujący raport materiałów - Użyj polecenia: ListaMaterialow lub ListaMaterialowSEP");
         }
 
         public void Terminate()
