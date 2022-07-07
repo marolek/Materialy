@@ -1,0 +1,9 @@
+D:\programowanie\C3D\Materialy\Materialy\obj\Release\net4.8\Materialy.csproj.AssemblyReference.cache
+D:\programowanie\C3D\Materialy\Materialy\obj\Release\net4.8\Materialy.GeneratedMSBuildEditorConfig.editorconfig
+D:\programowanie\C3D\Materialy\Materialy\obj\Release\net4.8\Materialy.AssemblyInfoInputs.cache
+D:\programowanie\C3D\Materialy\Materialy\obj\Release\net4.8\Materialy.AssemblyInfo.cs
+D:\programowanie\C3D\Materialy\Materialy\obj\Release\net4.8\Materialy.csproj.CoreCompileInputs.cache
+D:\programowanie\C3D\Materialy\Materialy\bin\Release\net4.8\Materialy.dll
+D:\programowanie\C3D\Materialy\Materialy\bin\Release\net4.8\Materialy.pdb
+D:\programowanie\C3D\Materialy\Materialy\obj\Release\net4.8\Materialy.dll
+D:\programowanie\C3D\Materialy\Materialy\obj\Release\net4.8\Materialy.pdb
