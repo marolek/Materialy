@@ -67,20 +67,17 @@ namespace Materialy
                                 System.IO.StreamWriter OutputFile = new System.IO.StreamWriter(OutputFileName);
                            
                                 //Wiersz nagłówków
-                                OutputFile.Write("Pikieta\t");
+                                string naglowekTxt = "Pikieta";
                                 foreach (QTOMaterial Material in ListaMaterialow)
-                                {
-                                    string MaterialInfo = String.Format(Material.Guid == ListaMaterialow.Last().Guid ? "{0}\n" : "{0}\t", Material.Name);
-                                    OutputFile.Write(MaterialInfo);
-                                }
+                                    naglowekTxt += String.Format("\t{0}", Material.Name);
 
-                                //Wiersz jednostek
-                                OutputFile.Write("Jednostka\t");
-                                for (int i = 1; i < ListaMaterialow.Count; i++) 
-                                {
-                                    OutputFile.Write("[ m² ]\t");
-                                }
-                                OutputFile.Write("[ m² ]\n");
+                                OutputFile.WriteLine(naglowekTxt);
+
+                                // Wiersz jednostek
+                                string jednostkiTxt = "Jednostka";
+                                jednostkiTxt += String.Concat(Enumerable.Repeat("\t[ m² ]", ListaMaterialow.Count));
+                                
+                                OutputFile.WriteLine(jednostkiTxt);
 
                                 foreach (ObjectId SampleLineID in GrupaLiniiSamplowania.GetSampleLineIds()) 
                                 {
@@ -166,13 +163,9 @@ namespace Materialy
                                 {
                                     string MaterialInfo = "";
                                     if (ListaMaterialow.Guid == ListyMaterialow.Last().Guid)
-                                    {
                                         MaterialInfo = String.Format(Material.Guid == ListaMaterialow.Last().Guid ? "{0}\n" : "{0}\t", Material.Name);
-                                    }
                                     else
-                                    {
                                         MaterialInfo = String.Format("{0}\t", Material.Name);
-                                    }
                                     OutputFile.Write(MaterialInfo);
                                     j++;
                                 }
@@ -200,22 +193,16 @@ namespace Materialy
                                         
                                         double area = 0.0;
                                         //MaterialSectionObject.Area zwraca 0! więc powierzchnia obliczona z obrysu materiału (Calculate.Area)
-                                        Point2dCollection p2 = new Point2dCollection();
+                                        var p2 = new Point2dCollection();
                                         SectionPointCollection sPts = MaterialSectionObject.SectionPoints;
                                         foreach(SectionPoint pt in sPts)
-                                        {
                                             p2.Add(new Point2d(pt.Location.X, pt.Location.Y));
-                                        }
-                                        
+
                                         area = Calculate.Area(p2);
                                         if (ListaMaterialow.Guid == ListyMaterialow.Last().Guid)
-                                        {
                                             OutputFile.Write(Material.Guid == ListaMaterialow.Last().Guid ? "{0}\n" : "{0}\t",area);
-                                        }
                                         else
-                                        {
                                             OutputFile.Write("{0}\t",area);
-                                        }
                                     }
                                 }
                             }
