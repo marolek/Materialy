@@ -73,32 +73,31 @@ namespace Materialy
 
                                 OutputFile.WriteLine(naglowekTxt);
 
-                                // Wiersz jednostek
-                                string jednostkiTxt = "Jednostka";
-                                jednostkiTxt += String.Concat(Enumerable.Repeat("\t[ m² ]", ListaMaterialow.Count));
-                                
-                                OutputFile.WriteLine(jednostkiTxt);
+                                // // Wiersz jednostek
+                                // string jednostkiTxt = "Jednostka";
+                                // jednostkiTxt += String.Concat(Enumerable.Repeat("\t[ m² ]", ListaMaterialow.Count));
+                                // OutputFile.WriteLine(jednostkiTxt);
 
                                 foreach (ObjectId SampleLineID in GrupaLiniiSamplowania.GetSampleLineIds()) 
                                 {
                                     SampleLine LiniaSamplowania = (SampleLine)acTrans.GetObject(SampleLineID, OpenMode.ForRead);
-                                    OutputFile.Write("{0}\t",LiniaSamplowania.Station);
+                                    
+                                    string wierszDanych = LiniaSamplowania.Station.ToString();
                                     foreach (QTOMaterial Material in ListaMaterialow)
                                     {
                                         ObjectId MaterialSectionID = LiniaSamplowania.GetMaterialSectionId(ListaMaterialow.Guid, Material.Guid);
                                         MaterialSection MaterialSectionObject = (MaterialSection)acTrans.GetObject(MaterialSectionID, OpenMode.ForRead);
                                         
-                                        double area = 0.0;
-                                        //MaterialSectionObject.Area zwraca 0! więc powierzchnia obliczona z obrysu materiału (Calculate.Area)
-                                        Point2dCollection p2 = new Point2dCollection();
                                         SectionPointCollection sPts = MaterialSectionObject.SectionPoints;
+                                        Point2dCollection p2 = new Point2dCollection();
+
                                         foreach(SectionPoint pt in sPts)
-                                        {
                                             p2.Add(new Point2d(pt.Location.X, pt.Location.Y));
-                                        }
-                                        area = Calculate.Area(p2);
-                                        OutputFile.Write(Material.Guid == ListaMaterialow.Last().Guid ? "{0}\n" : "{0}\t",area);
+
+                                        double area = Calculate.Area(p2);
+                                        wierszDanych += String.Format("\t{0}", area);
                                     }
+                                    OutputFile.WriteLine(wierszDanych);
                                 }
 
                                 OutputFile.Close();
@@ -150,39 +149,26 @@ namespace Materialy
                         foreach (ObjectId SampleLineGroupID in samplelinesGroupID) 
                         {
                             SampleLineGroup GrupaLiniiSamplowania = (SampleLineGroup)acTrans.GetObject(SampleLineGroupID, OpenMode.ForRead);
-
                             QTOMaterialListCollection ListyMaterialow = GrupaLiniiSamplowania.MaterialLists;
 
-                            int j=0;
-
-                            //Wiersz nagłówków
-                            OutputFile.Write("Pikieta\t");
+                            // Wiersz nagłówków
+                            string naglowekTxt = "Pikieta";
                             foreach (QTOMaterialList ListaMaterialow in ListyMaterialow) 
-                            {
                                 foreach (QTOMaterial Material in ListaMaterialow)
-                                {
-                                    string MaterialInfo = "";
-                                    if (ListaMaterialow.Guid == ListyMaterialow.Last().Guid)
-                                        MaterialInfo = String.Format(Material.Guid == ListaMaterialow.Last().Guid ? "{0}\n" : "{0}\t", Material.Name);
-                                    else
-                                        MaterialInfo = String.Format("{0}\t", Material.Name);
-                                    OutputFile.Write(MaterialInfo);
-                                    j++;
-                                }
-                            }
-                            
-                            // //Wiersz jednostek
-                            // OutputFile.Write("Jednostka\t");
-                            // for (int i = 1; i < j; i++) 
-                            // {
-                            //     OutputFile.Write("[ m² ]\t");
-                            // }
-                            // OutputFile.Write("[ m² ]\n");
+                                    naglowekTxt += String.Format("\t{0}", Material.Name);
 
+                            OutputFile.WriteLine(naglowekTxt);
+
+                            // // Wiersz jednostek
+                            // string jednostkiTxt = "Jednostka";
+                            // jednostkiTxt += String.Concat(Enumerable.Repeat("\t[ m² ]", ListaMaterialow.Count));
+                            // OutputFile.WriteLine(jednostkiTxt);
+
+                            
                             foreach (ObjectId SampleLineID in GrupaLiniiSamplowania.GetSampleLineIds()) 
                             {
                                 SampleLine LiniaSamplowania = (SampleLine)acTrans.GetObject(SampleLineID, OpenMode.ForRead);
-                                OutputFile.Write("{0}\t",LiniaSamplowania.Station);
+                                string wierszDanych = LiniaSamplowania.Station.ToString();
                                                             
                                 foreach (QTOMaterialList ListaMaterialow in ListyMaterialow) 
                                 {
@@ -190,21 +176,17 @@ namespace Materialy
                                     {
                                         ObjectId MaterialSectionID = LiniaSamplowania.GetMaterialSectionId(ListaMaterialow.Guid, Material.Guid);
                                         MaterialSection MaterialSectionObject = (MaterialSection)acTrans.GetObject(MaterialSectionID, OpenMode.ForRead);
-                                        
-                                        double area = 0.0;
-                                        //MaterialSectionObject.Area zwraca 0! więc powierzchnia obliczona z obrysu materiału (Calculate.Area)
+
                                         var p2 = new Point2dCollection();
                                         SectionPointCollection sPts = MaterialSectionObject.SectionPoints;
                                         foreach(SectionPoint pt in sPts)
                                             p2.Add(new Point2d(pt.Location.X, pt.Location.Y));
 
-                                        area = Calculate.Area(p2);
-                                        if (ListaMaterialow.Guid == ListyMaterialow.Last().Guid)
-                                            OutputFile.Write(Material.Guid == ListaMaterialow.Last().Guid ? "{0}\n" : "{0}\t",area);
-                                        else
-                                            OutputFile.Write("{0}\t",area);
+                                        double area = Calculate.Area(p2);
+                                        wierszDanych += String.Format("\t{0}", area);
                                     }
                                 }
+                                OutputFile.WriteLine(wierszDanych);
                             }
                         }
                         OutputFile.Close();
