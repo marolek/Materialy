@@ -88,13 +88,7 @@ namespace Materialy
                                         ObjectId MaterialSectionID = LiniaSamplowania.GetMaterialSectionId(ListaMaterialow.Guid, Material.Guid);
                                         MaterialSection MaterialSectionObject = (MaterialSection)acTrans.GetObject(MaterialSectionID, OpenMode.ForRead);
                                         
-                                        SectionPointCollection sPts = MaterialSectionObject.SectionPoints;
-                                        Point2dCollection p2 = new Point2dCollection();
-
-                                        foreach(SectionPoint pt in sPts)
-                                            p2.Add(new Point2d(pt.Location.X, pt.Location.Y));
-
-                                        double area = Calculate.Area(p2);
+                                        double area = MaterialSectionObject.Area2();
                                         wierszDanych += String.Format("\t{0}", area);
                                     }
                                     OutputFile.WriteLine(wierszDanych);
