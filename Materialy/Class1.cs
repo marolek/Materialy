@@ -62,7 +62,7 @@ namespace Materialy
                             foreach (QTOMaterialList ListaMaterialow in ListyMaterialow) 
                             {
 
-                                string OutputFileName = String.Format(ListyMaterialow.Count>1 ? "{0}{1}_{2}.txt" : "{0}{1}.txt", RaportPath, LiniaTrasowania.Name, ListaMaterialow.Name);
+                                string OutputFileName = String.Format(ListyMaterialow.Count>1 ? "{0}{1}_{2}_{3}.txt" : "{0}{1}_{3}.txt", RaportPath, LiniaTrasowania.Name, ListaMaterialow.Name, GrupaLiniiSamplowania.Name);
                                 ed.WriteMessage("\nPlik raportu: {0}", OutputFileName);
                                 System.IO.StreamWriter OutputFile = new System.IO.StreamWriter(OutputFileName);
                            
@@ -99,7 +99,7 @@ namespace Materialy
                                 System.IO.Directory.CreateDirectory(OldRaportPath);
 
                                 String czas = DateTime.Now.ToString("yyyyddMM");
-                                string destFile = String.Format(ListyMaterialow.Count>1 ? "{0}{1}_{2}_{3}.txt" : "{0}{1}_{3}.txt", OldRaportPath, LiniaTrasowania.Name, ListaMaterialow.Name, czas);
+                                string destFile = String.Format(ListyMaterialow.Count>1 ? "{0}{1}_{2}_{3}_{4}.txt" : "{0}{1}_{3}_{4}.txt", OldRaportPath, LiniaTrasowania.Name, ListaMaterialow.Name, GrupaLiniiSamplowania.Name, czas);
                                 System.IO.File.Copy(OutputFileName, destFile, true);
                             }
                         }
